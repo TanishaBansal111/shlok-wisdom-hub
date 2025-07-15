@@ -268,9 +268,24 @@ const ShlokPage = () => {
         </div>
       </header>
 
-      {/* Main Content with Horizontal Layout */}
-      <main className="container mx-auto px-4 py-8 max-w-6xl">
-        <div className="flex gap-6 items-start">
+      {/* Main Content */}
+      <main className="container mx-auto px-4 py-8 max-w-4xl">
+        <div className="flex gap-4 items-start">
+          {/* Compact Guru Character - Appears on left side when playing */}
+          {showGuru && (
+            <div className="w-32 animate-slide-in-right">
+              <Card className="bg-gradient-to-br from-orange-400 to-orange-500 border-orange-600/30 shadow-lg">
+                <CardContent className="p-4 text-center">
+                  <div className="text-3xl mb-2">🧑‍🏫</div>
+                  <h3 className="text-xs font-sacred text-white mb-1">गुरु जी</h3>
+                  <div className={`w-full h-1 bg-orange-200 rounded-full overflow-hidden ${isPlaying ? 'animate-pulse' : ''}`}>
+                    <div className={`h-full bg-white transition-all duration-1000 ${isPlaying ? 'w-full' : 'w-0'}`}></div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
           {/* Shlok Content */}
           <Card className="flex-1 shadow-sacred bg-card-gradient backdrop-blur-sm border-accent/20 animate-fade-in">
             <CardHeader className="text-center pb-6">
@@ -332,24 +347,6 @@ const ShlokPage = () => {
               </div>
             </CardContent>
           </Card>
-
-          {/* Guru Character - Appears horizontally when playing */}
-          {showGuru && (
-            <div className="w-80 animate-slide-in-right">
-              <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/30 shadow-lg">
-                <CardContent className="p-6 text-center">
-                  <div className="text-6xl mb-4 animate-bounce">🧑‍🏫</div>
-                  <h3 className="text-lg font-sacred text-primary mb-2">Guru Ji</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {isPlaying ? "Reading the sacred text..." : "Ready to explain"}
-                  </p>
-                  <div className={`w-full h-2 bg-muted rounded-full overflow-hidden ${isPlaying ? 'animate-pulse' : ''}`}>
-                    <div className={`h-full bg-primary transition-all duration-1000 ${isPlaying ? 'w-full' : 'w-0'}`}></div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
         </div>
 
         {/* Navigation */}
