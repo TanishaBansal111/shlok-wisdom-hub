@@ -116,4 +116,18 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Hide Lovable badge */
+  iframe[src*="lovable.dev"],
+  div[data-testid*="lovable"],
+  a[href*="lovable.dev"]:not([href*="docs"]),
+  *[class*="lovable-badge"],
+  *[id*="lovable-badge"],
+  div:has(> a[href*="lovable.dev"]) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+  }
 }
