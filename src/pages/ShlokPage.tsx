@@ -156,12 +156,25 @@ const ShlokPage = () => {
     setIsPlaying(true);
     setShowGuru(true);
     
-    // Simulate TTS narration sequence in Hindi
+    // Enhanced TTS narration sequence in Hindi with male voice
     const speak = (text: string) => {
       if ('speechSynthesis' in window) {
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'hi-IN';
-        utterance.rate = 0.7;
+        utterance.rate = 0.6; // Slower for spiritual effect
+        utterance.pitch = 0.8; // Lower pitch for male voice
+        utterance.volume = 0.9;
+        
+        // Try to select a male voice
+        const voices = speechSynthesis.getVoices();
+        const maleHindiVoice = voices.find(voice => 
+          voice.lang.includes('hi') && voice.name.toLowerCase().includes('male')
+        ) || voices.find(voice => voice.lang.includes('hi'));
+        
+        if (maleHindiVoice) {
+          utterance.voice = maleHindiVoice;
+        }
+        
         return new Promise((resolve) => {
           utterance.onend = resolve;
           speechSynthesis.speak(utterance);
@@ -276,17 +289,25 @@ const ShlokPage = () => {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="flex gap-2 sm:gap-4 items-start relative">
-          {/* Sticky Responsive Guru Character */}
+          {/* Enhanced Spiritual Guru Character */}
           {showGuru && (
             <div className="fixed top-1/2 left-2 transform -translate-y-1/2 z-50 w-16 sm:w-20 md:w-24 animate-fade-in">
               <Card className="bg-gradient-to-br from-orange-400 to-orange-500 border-orange-600/30 shadow-2xl">
                 <CardContent className="p-2 sm:p-3 text-center">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 mx-auto mb-1 sm:mb-2 rounded-full overflow-hidden">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 mx-auto mb-1 sm:mb-2 rounded-full overflow-hidden relative">
                     <img 
                       src={guruImage} 
                       alt="गुरु जी" 
-                      className="w-full h-full object-cover"
+                      className={`w-full h-full object-cover transition-all duration-300 ${
+                        isPlaying ? 'animate-subtle-breathing' : ''
+                      }`}
                     />
+                    {isPlaying && (
+                      <>
+                        <div className="absolute inset-0 rounded-full border-2 border-orange-300 opacity-50 animate-pulse"></div>
+                        <div className="absolute -inset-1 rounded-full border border-orange-200 opacity-30 animate-ping"></div>
+                      </>
+                    )}
                   </div>
                   <h3 className="text-xs sm:text-sm font-sacred text-white mb-1">गुरु जी</h3>
                   <div className={`w-full h-0.5 sm:h-1 bg-orange-200 rounded-full overflow-hidden ${isPlaying ? 'animate-pulse' : ''}`}>

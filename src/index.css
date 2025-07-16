@@ -130,4 +130,19 @@ All colors MUST be HSL.
     position: absolute !important;
     left: -9999px !important;
   }
+
+  /* Guru animations */
+  @keyframes subtle-breathing {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+  }
+  
+  @keyframes gentle-glow {
+    0%, 100% { box-shadow: 0 0 10px rgba(251, 146, 60, 0.3); }
+    50% { box-shadow: 0 0 20px rgba(251, 146, 60, 0.6); }
+  }
+
+  .animate-subtle-breathing {
+    animation: subtle-breathing 3s ease-in-out infinite, gentle-glow 3s ease-in-out infinite;
+  }
 }
