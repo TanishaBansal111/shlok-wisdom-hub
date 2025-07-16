@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, ChevronLeft, ChevronRight, Play, RotateCcw, BookOpen, Hash } from "lucide-react";
+import guruImage from "@/assets/guru-ji.png";
 
 const ShlokPage = () => {
   const { textId } = useParams();
@@ -155,12 +156,12 @@ const ShlokPage = () => {
     setIsPlaying(true);
     setShowGuru(true);
     
-    // Simulate TTS narration sequence
+    // Simulate TTS narration sequence in Hindi
     const speak = (text: string) => {
       if ('speechSynthesis' in window) {
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'hi-IN';
-        utterance.rate = 0.8;
+        utterance.rate = 0.7;
         return new Promise((resolve) => {
           utterance.onend = resolve;
           speechSynthesis.speak(utterance);
@@ -170,15 +171,19 @@ const ShlokPage = () => {
     };
 
     try {
-      await speak(`This is shlok number ${currentPage}`);
+      await speak(`श्लोक संख्या ${currentPage}`);
       await speak(currentShlok.original);
-      await speak("Meaning of shlok is");
+      await speak("श्लोक का अर्थ है");
       await speak(currentShlok.meaning);
     } catch (error) {
       console.error("TTS Error:", error);
     }
     
     setIsPlaying(false);
+    // Auto-reset after completion
+    setTimeout(() => {
+      setShowGuru(false);
+    }, 1000);
   };
 
   const resetShlok = () => {
@@ -270,15 +275,21 @@ const ShlokPage = () => {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 max-w-4xl">
-        <div className="flex gap-4 items-start">
-          {/* Compact Guru Character - Appears on left side when playing */}
+        <div className="flex gap-2 sm:gap-4 items-start relative">
+          {/* Sticky Responsive Guru Character */}
           {showGuru && (
-            <div className="w-32 animate-slide-in-right">
-              <Card className="bg-gradient-to-br from-orange-400 to-orange-500 border-orange-600/30 shadow-lg">
-                <CardContent className="p-4 text-center">
-                  <div className="text-3xl mb-2">🧑‍🏫</div>
-                  <h3 className="text-xs font-sacred text-white mb-1">गुरु जी</h3>
-                  <div className={`w-full h-1 bg-orange-200 rounded-full overflow-hidden ${isPlaying ? 'animate-pulse' : ''}`}>
+            <div className="fixed top-1/2 left-2 transform -translate-y-1/2 z-50 w-16 sm:w-20 md:w-24 animate-fade-in">
+              <Card className="bg-gradient-to-br from-orange-400 to-orange-500 border-orange-600/30 shadow-2xl">
+                <CardContent className="p-2 sm:p-3 text-center">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 mx-auto mb-1 sm:mb-2 rounded-full overflow-hidden">
+                    <img 
+                      src={guruImage} 
+                      alt="गुरु जी" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <h3 className="text-xs sm:text-sm font-sacred text-white mb-1">गुरु जी</h3>
+                  <div className={`w-full h-0.5 sm:h-1 bg-orange-200 rounded-full overflow-hidden ${isPlaying ? 'animate-pulse' : ''}`}>
                     <div className={`h-full bg-white transition-all duration-1000 ${isPlaying ? 'w-full' : 'w-0'}`}></div>
                   </div>
                 </CardContent>
@@ -287,7 +298,7 @@ const ShlokPage = () => {
           )}
 
           {/* Shlok Content */}
-          <Card className="flex-1 shadow-sacred bg-card-gradient backdrop-blur-sm border-accent/20 animate-fade-in">
+          <Card className={`flex-1 shadow-sacred bg-card-gradient backdrop-blur-sm border-accent/20 animate-fade-in transition-all duration-300 ${showGuru ? 'ml-20 sm:ml-24 md:ml-28' : ''}`}>
             <CardHeader className="text-center pb-6">
               <CardTitle className="text-2xl font-sacred text-primary mb-2">
                 Shlok {currentPage}
